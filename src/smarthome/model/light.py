@@ -1,7 +1,13 @@
+import threading
+
 from smarthome.model.device import Device
 
 COLOR_TEMPS = ("coolest", "cool", "neutral", "warm", "warmest")
 class Light(Device):
+    def __init__(self, name, mqtt_client):
+        super().__init__(name, mqtt_client)
+        self._off_timer = None
+        
     # properties
     @property
     def is_on(self) -> bool | None:
@@ -143,14 +149,18 @@ class Light(Device):
         })
 
     def turn_on_with_timed_off(self, seconds: int):
-        # maybe off_wait_time has to be added (see documentation)
         if not isinstance(seconds, int):
-            raise TypeError("Seconds must be an integer.")
-        if seconds <= 0:
-            raise ValueError("Seconds must be a value > 0.")
-        self.set({
-            "state": "ON",
-            "on_time": seconds
-        })
+            raise TypeError("seconds must be an integer.")
 
+        if seconds <= 0:
+            raise ValueError("seconds must be > 0.")
+
+        if self._off_timer is not None:
+            self._off_timer.cancel()
+
+        self.turn_on()
+
+        self._off_timer = threading.Timer(seconds, self.turn_off)
+        self._off_timer.daemon = True
+        self._off_timer.start()
     # more options available http://smarthome.local:8080/#/device/0/0xa4c138a23ea8239c/docs

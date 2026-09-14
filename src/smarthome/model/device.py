@@ -3,10 +3,10 @@ import json
 
 class Device:
 
-    def __init__(self, name, mqtt_client, topic):
+    def __init__(self, name, mqtt_client):
         self.name = name
         self.mqtt_client = mqtt_client
-        self.topic = topic
+        self.topic = f"zigbee2mqtt/{name}"
         self.state = {}
 
         self.mqtt_client.subscribe(self.topic)

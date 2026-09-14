@@ -4,11 +4,11 @@ version = "0.1.0"
 requires-python = ">=3.12"
 
 dependencies = [
-    "paho-mqtt>=2.1"
+    "paho-mqtt>=2.1", "fastapi"
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8",  "python-dotenv"
+    "pytest>=8",  "python-dotenv", "fastapi"
 ]
 
