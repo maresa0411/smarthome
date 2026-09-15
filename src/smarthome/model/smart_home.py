@@ -11,6 +11,7 @@ class SmartHome:
         )
 
         self.mqtt_client.on_message = self._on_message
+        self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.connect(mqtt_host, mqtt_port)
 
     def add_device(self, device):
@@ -49,6 +50,11 @@ class SmartHome:
             return
 
         device.on_message(payload)
+
+
+    def _on_connect(self, client, userdata, flags, reason_code, properties):
+        for device in self.devices.values():
+            device.request_state()
 
     def start(self):
         self.mqtt_client.loop_start()

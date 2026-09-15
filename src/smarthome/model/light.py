@@ -30,6 +30,14 @@ class Light(Device):
     def color(self) -> dict | None:
         return self.state.get("color")
 
+    def request_state(self):
+        self.get({
+            "state": "",
+            "brightness": "",
+            "color_temp": "",
+            "color": ""
+        })
+
     # set methods
     def toggle_state(self):
         self.set({"state" : "TOGGLE"})
