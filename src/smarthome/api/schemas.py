@@ -2,6 +2,7 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field
 
+# lights
 
 class LightResponse(BaseModel):
     name: str
@@ -23,3 +24,21 @@ class TimerRequest(BaseModel):
 
 class ColorRequest(BaseModel):
     color: str | tuple[int, int, int] | tuple[float, float]
+
+# sensors
+
+class DoorSensorResponse(BaseModel):
+    name: str
+    closed: bool | None
+    battery_low: bool | None
+    tamper_proof: bool | None
+    battery: float | None
+    voltage: float | None
+
+class ClimateSensorResponse(BaseModel):
+    name: str
+    battery: float | None
+    temperature: float | None
+    humidity: float | None
+    temperature_calibration: float | None
+    humidity_calibration: float | None

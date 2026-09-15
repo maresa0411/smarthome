@@ -21,3 +21,10 @@ class DoorSensor(Device):
     @property
     def voltage(self):
         return self.state.get("voltage")
+
+    def request_state(self):
+        self.get({
+            "tamper": "",
+            "battery": "",
+            "voltage": ""
+        })

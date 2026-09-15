@@ -1,6 +1,9 @@
 import json
 import paho.mqtt.client as mqtt
 
+from smarthome.model.device import Device
+
+
 class SmartHome:
     def __init__(self, mqtt_host: str, mqtt_port: int):
         self.devices = {}
@@ -14,7 +17,12 @@ class SmartHome:
         self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.connect(mqtt_host, mqtt_port)
 
-    def add_device(self, device):
+    def add_devices(self, *devices: Device):
+        for device in devices:
+            self.add_device(device)
+
+
+    def add_device(self, device: Device):
         if device.name in self.devices:
             raise ValueError(
                 f"Device '{device.name}' already exists."
