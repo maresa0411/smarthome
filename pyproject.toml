@@ -4,11 +4,26 @@ version = "0.1.0"
 requires-python = ">=3.12"
 
 dependencies = [
-    "paho-mqtt>=2.1", "fastapi"
+    "paho-mqtt>=2.1", "fastapi",  "python-dotenv"
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8",  "python-dotenv", "fastapi"
+    "pytest>=8", "pytest-cov"
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--cov=smarthome",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+
+[tool.coverage.run]
+source = ["smarthome"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true

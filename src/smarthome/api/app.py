@@ -13,9 +13,6 @@ from smarthome.model.smart_home import SmartHome
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.include_router(lights.router)
-    app.include_router(sensors.router)
-
     load_dotenv()
     home = SmartHome(os.getenv("MQTT_HOST"), int(os.getenv("MQTT_PORT", "1883")))
 
@@ -34,6 +31,9 @@ async def lifespan(app: FastAPI):
         home.stop()
 
 app = FastAPI(lifespan=lifespan)
+
+app.include_router(lights.router)
+app.include_router(sensors.router)
 
 @app.exception_handler(ValueError)
 async def value_error_handler(request: Request, exc: ValueError):
