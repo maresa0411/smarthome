@@ -23,15 +23,6 @@ class ClimateSensor(Device):
     def humidity_calibration(self) -> float | None:
         return self.state.get("humidity_calibration")
 
-    def request_state(self):
-        self.get({
-            "battery": "",
-            "temperature": "",
-            "humidity": "",
-            "temperature_calibration": "",
-            "humidity_calibration": ""
-        })
-
     # set methods
     def set_temperature_calibration(self, value: int | float):
         if not isinstance(value, (int, float)):

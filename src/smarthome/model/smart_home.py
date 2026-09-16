@@ -2,6 +2,7 @@ import json
 import paho.mqtt.client as mqtt
 
 from smarthome.model.device import Device
+from smarthome.model.light import Light
 
 
 class SmartHome:
@@ -59,8 +60,10 @@ class SmartHome:
 
         device.on_message(payload)
 
-
     def _on_connect(self, client, userdata, flags, reason_code, properties):
+        for device in self.devices.values():
+            client.subscribe(device.topic)
+
         for device in self.devices.values():
             device.request_state()
 

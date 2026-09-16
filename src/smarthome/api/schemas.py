@@ -42,3 +42,9 @@ class ClimateSensorResponse(BaseModel):
     humidity: float | None
     temperature_calibration: float | None
     humidity_calibration: float | None
+
+class TemperatureCalibrationRequest(BaseModel):
+    value: float = Field(ge=-50, le=50)
+
+class HumidityCalibrationRequest(BaseModel):
+    value: float = Field(ge=-50, le=50)

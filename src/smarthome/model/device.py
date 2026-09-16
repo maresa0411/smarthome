@@ -9,8 +9,6 @@ class Device:
         self.topic = f"zigbee2mqtt/{name}"
         self.state = {}
 
-        self.mqtt_client.subscribe(self.topic)
-
     def set(self, payload: dict):
         self.mqtt_client.publish(
             f"{self.topic}/set",
@@ -25,6 +23,9 @@ class Device:
 
     def on_message(self, payload: dict):
         self.state.update(payload)
+
+    def request_state(self):
+        pass
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, topic={self.topic!r})"
