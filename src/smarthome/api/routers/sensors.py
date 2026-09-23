@@ -51,9 +51,9 @@ def set_humidity_calibration(humidity_calibration_request: HumidityCalibrationRe
 def _get_door_sensor_response_to_door_sensor(door_sensor: DoorSensor) -> DoorSensorResponse:
     return DoorSensorResponse(
         name = door_sensor.name,
-        closed = door_sensor.is_closed,
-        battery_low = door_sensor.is_battery_low,
-        tamper_proof = door_sensor.is_tamper_proof,
+        closed = door_sensor.closed,
+        battery_low = door_sensor.battery_low,
+        tamper_proof = door_sensor.tamper_proof,
         battery = door_sensor.battery,
         voltage = door_sensor.voltage
     )
