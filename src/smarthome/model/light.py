@@ -355,6 +355,7 @@ class Light(Device):
             return
 
         self.set_color(color)
+        print(self.color)
         self.set_brightness(start_brightness)
         self.turn_on()
 
