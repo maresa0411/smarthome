@@ -1,3 +1,4 @@
+from datetime import time
 from typing import Annotated
 
 from pydantic import BaseModel, Field
@@ -24,6 +25,13 @@ class TimerRequest(BaseModel):
 
 class ColorRequest(BaseModel):
     color: str | tuple[int, int, int] | tuple[float, float]
+
+class AlarmRequest(BaseModel):
+    start_time: time
+    duration: float
+    start_brightness: int | None = Field(default=None, ge=0, le=254)
+    end_brightness: int | None = Field(default=None, ge=0, le=254)
+    color: str | tuple[int, int, int] | tuple[float, float] | None = None
 
 # sensors
 

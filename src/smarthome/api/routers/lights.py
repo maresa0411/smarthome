@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
 
 from smarthome.api.dependencies import get_home, _get_light_by_id
-from smarthome.api.schemas import BrightnessRequest, ColorTempRequest, ColorRequest, LightResponse, TimerRequest
+from smarthome.api.schemas import BrightnessRequest, ColorTempRequest, ColorRequest, LightResponse, TimerRequest, \
+    AlarmRequest
 from smarthome.model.light import Light
 from smarthome.model.smart_home import SmartHome
 
@@ -49,6 +50,34 @@ def set_color(request: ColorRequest, light: Light = Depends(_get_light_by_id)):
 def turn_on_with_timed_off(request: TimerRequest, light: Light = Depends(_get_light_by_id)):
     light.turn_on_with_timed_off(request.seconds)
 
+@router.post("/{light_id}/set_light_alarm", status_code=204)
+def set_light_alarm(
+    request: AlarmRequest,
+    light: Light = Depends(_get_light_by_id),
+):
+    print(f"set alarm: {light.name} \n")
+    kwargs = {
+        "start_time": request.start_time,
+        "duration": request.duration,
+    }
+
+    if request.start_brightness is not None:
+        kwargs["start_brightness"] = request.start_brightness
+
+    if request.end_brightness is not None:
+        kwargs["end_brightness"] = request.end_brightness
+
+    if request.color is not None:
+        kwargs["color"] = request.color
+
+    print(kwargs)
+
+    light.set_light_alarm(**kwargs)
+
+@router.post("/{light_id}/cancel_light_alarn", status_code=204)
+def cancel_light_alarm(light: Light = Depends(_get_light_by_id)):
+    print(f"cancel alarm: {light.name}")
+    light.cancel_light_alarm()
 
 def _get_light_response_to_light(light: Light) -> LightResponse:
     return LightResponse(

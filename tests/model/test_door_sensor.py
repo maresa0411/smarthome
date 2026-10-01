@@ -16,9 +16,9 @@ def sensor(mqtt_client):
 
 
 def test_initial_state(sensor):
-    assert sensor.is_closed is None
-    assert sensor.is_battery_low is None
-    assert sensor.is_tamper_proof is None
+    assert sensor.closed is None
+    assert sensor.battery_low is None
+    assert sensor.tamper_proof is None
     assert sensor.battery is None
     assert sensor.voltage is None
 
@@ -38,31 +38,31 @@ def test_voltage(sensor):
 def test_battery_low_true(sensor):
     sensor.state = {"battery_low": True}
 
-    assert sensor.is_battery_low is True
+    assert sensor.battery_low is True
 
 
 def test_battery_low_false(sensor):
     sensor.state = {"battery_low": False}
 
-    assert sensor.is_battery_low is False
+    assert sensor.battery_low is False
 
 
 def test_tamper_true(sensor):
     sensor.state = {"tamper": True}
 
-    assert sensor.is_tamper_proof is False
+    assert sensor.tamper_proof is False
 
 
 def test_tamper_false(sensor):
     sensor.state = {"tamper": False}
 
-    assert sensor.is_tamper_proof is True
+    assert sensor.tamper_proof is True
 
 
 def test_tamper_missing(sensor):
     sensor.state = {}
 
-    assert sensor.is_tamper_proof is None
+    assert sensor.tamper_proof is None
 
 
 def test_all_properties(sensor):
@@ -74,8 +74,8 @@ def test_all_properties(sensor):
         "voltage": 3000,
     }
 
-    assert sensor.is_closed is True
-    assert sensor.is_battery_low is False
-    assert sensor.is_tamper_proof is True
+    assert sensor.closed is True
+    assert sensor.battery_low is False
+    assert sensor.tamper_proof is True
     assert sensor.battery == 91
     assert sensor.voltage == 3000
