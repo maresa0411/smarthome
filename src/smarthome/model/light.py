@@ -354,10 +354,10 @@ class Light(Device):
         if self._alarm_stop_event.wait(delay):
             return
 
-        self.set_color(color)
-        print(self.color)
         self.set_brightness(start_brightness)
         self.turn_on()
+        self.set_color(color)
+        print(self.color)
 
         self._fade_brightness(
             duration=duration,
