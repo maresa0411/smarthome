@@ -279,7 +279,6 @@ class Light(Device):
         color: Color = COLOR_ORANGE,
     ) -> None:
 
-
         if not isinstance(start_time, time):
             raise TypeError(
                 "start_time must be a datetime.time object."
@@ -297,6 +296,7 @@ class Light(Device):
 
         self._check_brightness(start_brightness)
         self._check_brightness(end_brightness)
+        print(f"Color: {color}")
         self._check_color(color)
 
         if end_brightness < start_brightness:
@@ -357,6 +357,7 @@ class Light(Device):
         self.set_color(color)
         self.set_brightness(start_brightness)
         self.turn_on()
+        print(self)
 
         self._fade_brightness(
             duration=duration,
@@ -380,7 +381,6 @@ class Light(Device):
 
         interval = duration_seconds / difference
 
-        print(f"start_brightness: {self.brightness}")
         for brightness in range(
             start_brightness + 1,
             end_brightness + 1,
@@ -390,10 +390,9 @@ class Light(Device):
                 return
 
             self.set_brightness(brightness)
-            print(f"current_brightness: {self.brightness}")
 
         self._alarm_thread = None
-        print("alarm finished")
+        print("Alarm finished")
 
     def cancel_light_alarm(self) -> None:
 
