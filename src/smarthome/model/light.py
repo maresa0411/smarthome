@@ -357,7 +357,6 @@ class Light(Device):
         self.set_color(color)
         self.set_brightness(start_brightness)
         self.turn_on()
-        print(self)
 
         self._fade_brightness(
             duration=duration,
