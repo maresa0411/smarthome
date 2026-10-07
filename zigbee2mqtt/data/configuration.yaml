@@ -1,0 +1,23 @@
+homeassistant:
+  enabled: false
+mqtt:
+  server: mqtt://mosquitto:1883
+  base_topic: zigbee2mqtt
+serial:
+  port: /dev/ttyUSB0
+  adapter: ember
+frontend:
+  enabled: true
+  port: 8080
+advanced:
+  log_level: error
+version: 5
+devices:
+  '0xa4c138a23ea8239c':
+    friendly_name: kommode
+  '0x70d07efffea3bfe4':
+    friendly_name: zimmer_sensor
+  '0x18690afffe68a43c':
+    friendly_name: kueche_sensor
+  '0x8c73dafffe009e07':
+    friendly_name: tuer_sensor

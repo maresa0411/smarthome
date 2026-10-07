@@ -1,3 +1,23 @@
-/.env
-/.venv/
-/.idea/
+# Mosquitto
+mosquitto/data/
+mosquitto/log/
+
+# Zigbee2MQTT
+zigbee2mqtt/data/*
+
+!zigbee2mqtt/data/configuration.yaml
+
+*.log
+*.db
+*.json
+
+.env
+.venv/
+.idea/
+htmlcov/
+.coverage
+
+# Python Build & Cache
+*.egg-info/
+__pycache__/
+*.pyc
