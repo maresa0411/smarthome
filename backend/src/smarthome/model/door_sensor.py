@@ -7,7 +7,7 @@ class DoorSensor(Device):
         contact = self.state.get("contact")
         if contact is None:
             return None
-        return not contact
+        return contact
 
     @property
     def battery_low(self) -> bool | None:
