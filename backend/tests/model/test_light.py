@@ -284,6 +284,20 @@ def test_set_hex_color_invalid_characters(light, value):
     with pytest.raises(ValueError):
         light.set_color(value)
 
+@pytest.mark.parametrize(
+    "value",
+    [
+        "1234567",
+        "FF00FF0",
+        "@123456",
+        " 123456",
+    ]
+)
+def test_set_hex_color_missing_hash_prefix(light, mqtt_client, value):
+    with pytest.raises(ValueError, match="must start with #"):
+        light.set_color(value)
+
+    mqtt_client.publish.assert_not_called()
 
 # -------------------------------------------------------------------
 # RGB

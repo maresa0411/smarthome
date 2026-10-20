@@ -13,13 +13,14 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
 addopts = [
     "-v",
     "--cov=smarthome",
     "--cov-report=term-missing",
     "--cov-report=html",
 ]
+pythonpath = ["src"]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["smarthome"]

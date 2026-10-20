@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -52,25 +52,24 @@ def door_sensor(mqtt_client):
 
 
 @pytest.fixture
-def home(climate_sensor, door_sensor):
-    home = Mock(spec=SmartHome)
+def home(mqtt_client, tmp_path, climate_sensor, door_sensor):
+    with patch(
+        "smarthome.model.smart_home.mqtt.Client",
+        return_value=mqtt_client
+    ):
+        home = SmartHome(
+            "localhost", 1883,
+            config_file=tmp_path / "devices.json"
+        )
 
-    home.devices = {
-        climate_sensor.name: climate_sensor,
-        door_sensor.name: door_sensor
-    }
-
-    home.get_device.side_effect = home.devices.get
-
+    home.add_devices(climate_sensor, door_sensor)
     return home
-
 
 @pytest.fixture
 def client(home):
     app.dependency_overrides[get_home] = lambda: home
 
-    with TestClient(app) as client:
-        yield client
+    yield TestClient(app)
 
     app.dependency_overrides.clear()
 

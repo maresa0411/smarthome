@@ -1,10 +1,24 @@
 from datetime import time
 from typing import Annotated
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+from smarthome.model.device import Device
+
+class NewDeviceRequest(BaseModel):
+  name: str
+  type: str
+
+  @field_validator("type")
+  @classmethod
+  def validate_type(cls, value: str) -> str:
+    normalized = value.lower()
+    if normalized not in Device.registry:
+      allowed = list(Device.registry.keys())
+      raise ValueError(f"Unknown device type '{value}'. Allowed: {allowed}")
+    return normalized
 
 # lights
-
 class LightResponse(BaseModel):
     name: str
     is_on: bool | None

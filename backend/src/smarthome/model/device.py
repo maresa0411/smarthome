@@ -2,6 +2,11 @@ import json
 
 
 class Device:
+    registry = {}
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.registry[cls.__name__.lower()] = cls
 
     def __init__(self, name, mqtt_client):
         self.name = name

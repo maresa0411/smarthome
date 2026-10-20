@@ -2,13 +2,12 @@ import os
 from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.responses import JSONResponse
 
+from smarthome.api.dependencies import get_home
 from smarthome.api.routers import lights, sensors
-from smarthome.model.climate_sensor import ClimateSensor
-from smarthome.model.door_sensor import DoorSensor
-from smarthome.model.light import Light
+from smarthome.api.schemas import NewDeviceRequest
 from smarthome.model.smart_home import SmartHome
 
 @asynccontextmanager
@@ -16,12 +15,6 @@ async def lifespan(app: FastAPI):
     load_dotenv()
     home = SmartHome(os.getenv("MQTT_HOST"), int(os.getenv("MQTT_PORT", "1883")))
 
-    kommode = Light("kommode", home.mqtt_client)
-    tuer = DoorSensor("tuer_sensor", home.mqtt_client)
-    kueche = ClimateSensor("kueche_sensor", home.mqtt_client)
-    zimmer = ClimateSensor("zimmer_sensor", home.mqtt_client)
-
-    home.add_devices(kommode, tuer, kueche, zimmer)
     app.state.home = home
     home.start()
 
@@ -41,3 +34,7 @@ async def value_error_handler(request: Request, exc: ValueError):
         status_code=400,
         content={"detail": str(exc)}
    )
+
+@app.post("/add_device", status_code=204)
+def add_device(request: NewDeviceRequest, home: SmartHome = Depends(get_home)):
+    home.create_and_add_device(request.name, request.type)

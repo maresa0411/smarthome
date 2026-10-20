@@ -307,7 +307,7 @@ class Light(Device):
 
         self.cancel_light_alarm()
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now()
 
         alarm_datetime = datetime.combine(
             now.date(),

@@ -1,7 +1,10 @@
 from unittest.mock import Mock
 
 import pytest
-from fastapi import HTTPException
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.testclient import TestClient
+
+from smarthome.api.dependencies import get_home
 
 from smarthome.api.dependencies import (
     _get_light_by_id,
@@ -23,6 +26,40 @@ def mqtt_client():
 def home():
     return Mock(spec=SmartHome)
 
+def test_get_home_returns_home_from_app_state(home):
+    request = Mock()
+    request.app.state.home = home
+
+    assert get_home(request) is home
+
+
+def test_get_home_with_real_app_state(home):
+    app = FastAPI()
+    app.state.home = home
+
+    @app.get("/probe")
+    def probe(h: SmartHome = Depends(get_home)):
+        return {"same": h is home}
+
+    client = TestClient(app)
+
+    response = client.get("/probe")
+
+    assert response.status_code == 200
+    assert response.json() == {"same": True}
+
+
+def test_get_home_without_state_raises_attribute_error():
+    app = FastAPI()
+
+    @app.get("/probe")
+    def probe(h: SmartHome = Depends(get_home)):
+        return {}
+
+    client = TestClient(app, raise_server_exceptions=True)
+
+    with pytest.raises(AttributeError):
+        client.get("/probe")
 
 def test_get_light_by_id_returns_light(home, mqtt_client):
     light = Light("test_light", mqtt_client)

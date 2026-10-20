@@ -1,14 +1,15 @@
 import json
+from pathlib import Path
+
 import paho.mqtt.client as mqtt
 
 from smarthome.model.device import Device
-from smarthome.model.light import Light
-
 
 class SmartHome:
-    def __init__(self, mqtt_host: str, mqtt_port: int):
+    def __init__(self, mqtt_host: str, mqtt_port: int, config_file="devices.json"):
         self.devices = {}
         self.devices_by_topic = {}
+        self.config_file = Path(config_file)
 
         self.mqtt_client = mqtt.Client(
             mqtt.CallbackAPIVersion.VERSION2
@@ -18,10 +19,31 @@ class SmartHome:
         self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.connect(mqtt_host, mqtt_port)
 
+        self.load_devices()
+
+    def save_devices(self):
+        data = [
+            {"name": dev.name, "type": dev.__class__.__name__.lower()}
+            for dev in self.devices.values()
+        ]
+        with open(self.config_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+
+    def load_devices(self):
+        if not self.config_file.exists():
+            return
+
+        with open(self.config_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        for item in data:
+            self.create_and_add_device(
+                name=item["name"],device_type=item["type"], save=False
+            )
+
     def add_devices(self, *devices: Device):
         for device in devices:
             self.add_device(device)
-
 
     def add_device(self, device: Device):
         if device.name in self.devices:
@@ -36,6 +58,21 @@ class SmartHome:
 
         self.devices[device.name] = device
         self.devices_by_topic[device.topic] = device
+
+    def create_and_add_device(self, name: str, device_type: str, save: bool = True):
+        normalized_type = device_type.lower()
+
+        if normalized_type not in Device.registry:
+            raise ValueError(f"Unknown device type: {device_type}")
+
+        device_class = Device.registry[normalized_type]
+
+        new_device = device_class(name=name, mqtt_client=self.mqtt_client)
+
+        self.add_device(new_device)
+
+        if save:
+            self.save_devices()
 
     def remove_device(self, name: str):
         device = self.devices.pop(name)
