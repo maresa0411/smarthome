@@ -13,7 +13,11 @@ from smarthome.model.smart_home import SmartHome
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     load_dotenv()
-    home = SmartHome(os.getenv("MQTT_HOST"), int(os.getenv("MQTT_PORT", "1883")))
+    home = SmartHome(
+        os.getenv("MQTT_HOST"),
+        int(os.getenv("MQTT_PORT", "1883")),
+        config_file=os.getenv("DEVICES_FILE", "devices.json"),
+    )
 
     app.state.home = home
     home.start()
