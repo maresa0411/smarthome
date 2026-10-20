@@ -4,7 +4,7 @@ from smarthome.model.climate_sensor import ClimateSensor
 from smarthome.model.door_sensor import DoorSensor
 from smarthome.model.light import Light
 from smarthome.model.smart_home import SmartHome
-
+from smarthome.model.thermostat import Thermostat
 
 def get_home(request: Request) -> SmartHome:
     return request.app.state.home
@@ -26,3 +26,9 @@ def _get_climate_sensor_by_id(sensor_id: str, home: SmartHome = Depends(get_home
     if climate_sensor is None or not isinstance(climate_sensor, ClimateSensor):
         raise HTTPException(status_code=404, detail="Climate Sensor not found")
     return climate_sensor
+
+def _get_thermostat_by_id(thermostat_id: str, home: SmartHome = Depends(get_home)) -> Thermostat:
+    thermostat = home.get_device(thermostat_id)
+    if thermostat is None or not isinstance(thermostat, Thermostat):
+        raise HTTPException(status_code=404, detail="Thermostat not found")
+    return thermostat
