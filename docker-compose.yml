@@ -30,9 +30,12 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend-data:/app/data
     environment:
       - TZ=Europe/Berlin
       - MQTT_HOST=mosquitto
       - MQTT_PORT=1883
+      - DEVICES_FILE=/app/data/devices.json
     depends_on:
       - mosquitto
