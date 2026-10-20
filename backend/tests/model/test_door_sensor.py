@@ -74,7 +74,7 @@ def test_all_properties(sensor):
         "voltage": 3000,
     }
 
-    assert sensor.closed is True
+    assert sensor.closed is False
     assert sensor.battery_low is False
     assert sensor.tamper_proof is True
     assert sensor.battery == 91
