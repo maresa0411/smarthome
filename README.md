@@ -33,6 +33,23 @@ Currently supported devices:
   * Temperature calibration
   * Humidity calibration
 
+* Thermostats (Currently used model: SONOFF TRVZB)
+
+  * Current temperature
+  * Heating setpoint
+  * System mode (off, auto, heat) and running state
+  * Temperature calibration
+  * Boost and timer mode
+  * Weekly heating schedule
+  * Child lock
+  * Open window detection
+  * Frost protection temperature
+  * Temperature source (internal or external sensor)
+  * Valve opening and closing degree
+  * Temperature accuracy
+  * Smart temperature control
+  * Battery status
+
 Sensor states are updated through MQTT messages published by Zigbee2MQTT.
 
 Devices are added at runtime through the API and persisted in a `devices.json` file, so they are restored on the next start.
