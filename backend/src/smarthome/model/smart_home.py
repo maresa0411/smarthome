@@ -74,9 +74,12 @@ class SmartHome:
         if save:
             self.save_devices()
 
-    def remove_device(self, name: str):
+    def remove_device(self, name: str, save: bool = True):
         device = self.devices.pop(name)
         self.devices_by_topic.pop(device.topic)
+
+        if save:
+            self.save_devices()
 
     def get_device(self, name: str):
         return self.devices.get(name)

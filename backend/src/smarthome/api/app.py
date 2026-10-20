@@ -2,7 +2,7 @@ import os
 from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
 from smarthome.api.dependencies import get_home
@@ -42,3 +42,13 @@ async def value_error_handler(request: Request, exc: ValueError):
 @app.post("/add_device", status_code=204)
 def add_device(request: NewDeviceRequest, home: SmartHome = Depends(get_home)):
     home.create_and_add_device(request.name, request.type)
+
+@app.delete("/remove_device", status_code=204)
+def remove_device(name: str, home: SmartHome = Depends(get_home)):
+    try:
+        home.remove_device(name)
+    except KeyError:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Device '{name}' not found",
+        )

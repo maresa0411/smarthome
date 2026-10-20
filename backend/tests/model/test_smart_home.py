@@ -514,6 +514,56 @@ def test_removed_device_can_be_added_again(home, device):
 
     assert home.devices["test_device"] is device
 
+def test_remove_device_updates_config(home, config_file):
+    home.create_and_add_device("licht", "light")
+    home.create_and_add_device("tuer", "doorsensor")
+
+    home.remove_device("licht")
+
+    assert json.loads(config_file.read_text(encoding="utf-8")) == [
+        {"name": "tuer", "type": "doorsensor"}
+    ]
+
+
+def test_remove_last_device_writes_empty_list(home, config_file):
+    home.create_and_add_device("licht", "light")
+
+    home.remove_device("licht")
+
+    assert json.loads(config_file.read_text(encoding="utf-8")) == []
+
+
+def test_remove_device_without_save_does_not_write(home, config_file):
+    home.create_and_add_device("licht", "light")
+    content_before = config_file.read_text(encoding="utf-8")
+
+    home.remove_device("licht", save=False)
+
+    assert "licht" not in home.devices
+    assert config_file.read_text(encoding="utf-8") == content_before
+
+
+def test_remove_unknown_device_does_not_touch_config(home, config_file):
+    home.create_and_add_device("licht", "light")
+    content_before = config_file.read_text(encoding="utf-8")
+
+    with pytest.raises(KeyError):
+        home.remove_device("unknown")
+
+    assert config_file.read_text(encoding="utf-8") == content_before
+
+
+def test_removed_device_is_not_restored_after_restart(
+    mqtt_client, config_file
+):
+    first = build_home(mqtt_client, config_file)
+    first.create_and_add_device("licht", "light")
+    first.remove_device("licht")
+
+    second = build_home(mqtt_client, config_file)
+
+    assert second.devices == {}
+
 
 # -------------------------------------------------------------------
 # _on_connect (Ergänzung)
