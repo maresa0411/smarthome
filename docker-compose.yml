@@ -39,7 +39,7 @@ services:
       - DEVICES_FILE=/app/data/devices.json
     depends_on:
       - mosquitto
-    frontend:
+  frontend:
       image: nginx:alpine
       container_name: smarthome-web-frontend
       restart: unless-stopped
