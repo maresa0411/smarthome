@@ -74,7 +74,7 @@ def set_light_alarm(
 
     light.set_light_alarm(**kwargs)
 
-@router.post("/{light_id}/cancel_light_alarn", status_code=204)
+@router.post("/{light_id}/cancel_light_alarm", status_code=204)
 def cancel_light_alarm(light: Light = Depends(_get_light_by_id)):
     print(f"cancel alarm: {light.name}")
     light.cancel_light_alarm()

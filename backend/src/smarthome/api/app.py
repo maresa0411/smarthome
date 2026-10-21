@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from smarthome.api.dependencies import get_home
 from smarthome.api.routers import lights, sensors, thermostats
 from smarthome.api.schemas import NewDeviceRequest
+from smarthome.model.device import Device
 from smarthome.model.smart_home import SmartHome
 
 @asynccontextmanager
@@ -53,3 +54,7 @@ def remove_device(name: str, home: SmartHome = Depends(get_home)):
             status_code=404,
             detail=f"Device '{name}' not found",
         )
+
+@app.get("/get_device_types")
+def get_device_types():
+    return Device.registry.keys()

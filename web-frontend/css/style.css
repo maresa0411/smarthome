@@ -1,0 +1,111 @@
+:root {
+  --bg: #0d1017; --s1: #151b26; --s2: #1d2635; --bd: #2a3548;
+  --tx: #e8ecf4; --mu: #8995ab; --ac: #f2b84b;
+  --ok: #46d39a; --wa: #f2b84b; --bad: #ff6070; --hot: #ff8a4c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; color: var(--tx); background: var(--bg);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.top { display: flex; align-items: center; gap: 16px; padding: 22px clamp(16px, 4vw, 40px); }
+.top h1 { flex: 1; margin: 0; font-size: 1.35rem; font-weight: 650; }
+.status { color: var(--mu); font-size: .85rem; }
+.status.bad { color: var(--bad); }
+.empty { text-align: center; color: var(--mu); padding: 60px 20px; }
+
+.grid {
+  display: grid; gap: 18px; align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  padding: 0 clamp(16px, 4vw, 40px) 48px;
+}
+.tile {
+  background: var(--s1); border: 1px solid var(--bd); border-radius: 18px; padding: 16px;
+  transition: border-color .3s, box-shadow .3s;
+}
+.tile.on { border-color: #7a6230; box-shadow: 0 0 30px -10px #f2b84b88; }
+.tile header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.ic { width: 44px; height: 44px; display: grid; place-items: center; font-size: 1.4rem; background: var(--s2); border-radius: 12px; }
+.ttl { flex: 1; min-width: 0; }
+.ttl h3 { margin: 0; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ttl small { color: var(--mu); }
+.badge { font-size: .75rem; padding: 3px 10px; border-radius: 99px; background: var(--s2); color: var(--mu); }
+.badge.ok { background: #12372a; color: var(--ok); }
+.badge.warn { background: #3b2c0d; color: var(--wa); }
+.badge.bad { background: #3d1820; color: var(--bad); }
+.badge.hot { background: #3d2112; color: var(--hot); }
+.x { background: none; border: 0; cursor: pointer; opacity: .5; padding: 6px; border-radius: 8px; font-size: 1rem; }
+.x:hover, .x:focus-visible { opacity: 1; background: var(--s2); }
+
+.body { display: grid; gap: 12px; }
+.big { font-size: 2.1rem; font-weight: 650; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--mu); }
+.val { color: var(--tx); }
+.val.ok { color: var(--ok); } .val.warn { color: var(--wa); } .val.bad { color: var(--bad); }
+
+button, input, select { font: inherit; color: var(--tx); }
+.btn {
+  background: var(--s2); border: 1px solid var(--bd); border-radius: 10px;
+  padding: 8px 14px; cursor: pointer;
+}
+.btn:hover { border-color: var(--mu); }
+.btn.primary { background: var(--ac); border-color: var(--ac); color: #1a1405; font-weight: 600; }
+.btn.danger { background: var(--bad); border-color: var(--bad); color: #1d0508; font-weight: 600; }
+.btn.sm { padding: 4px 10px; font-size: .85rem; }
+:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
+.power { font-weight: 600; }
+.tile.on .power { background: var(--ac); border-color: var(--ac); color: #1a1405; }
+.cur { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--bd); }
+
+input, select {
+  width: 100%; background: #0f141d; border: 1px solid var(--bd); border-radius: 10px; padding: 8px 10px;
+}
+input[type=range] { padding: 0; accent-color: var(--ac); }
+input[type=color] { padding: 2px; height: 38px; min-width: 52px; cursor: pointer; }
+.sl { display: grid; gap: 6px; }
+.sl .row output { color: var(--tx); }
+
+details { background: var(--s2); border-radius: 12px; padding: 10px 12px; }
+summary { cursor: pointer; color: var(--mu); }
+.inner { display: grid; gap: 10px; margin-top: 12px; }
+.inline { grid-auto-flow: column; grid-auto-columns: auto; align-items: center; }
+.inline input { width: 80px; }
+.colors { display: grid; grid-template-columns: 56px repeat(3, 1fr) auto; gap: 6px; align-items: center; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }
+.fields label { display: grid; gap: 4px; color: var(--mu); font-size: .85rem; }
+.favs-h { display: flex; justify-content: space-between; align-items: center; color: var(--mu); }
+.favs { display: flex; flex-wrap: wrap; gap: 8px; }
+.fav { position: relative; }
+.sw { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--bd); cursor: pointer; }
+.fx {
+  position: absolute; top: -6px; right: -6px; width: 16px; height: 16px; padding: 0; line-height: 1;
+  border-radius: 50%; border: 0; background: var(--bad); color: #fff; font-size: .7rem; cursor: pointer; display: none;
+}
+.fav:hover .fx, .fav:focus-within .fx { display: block; }
+
+.seg-group { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--s2); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg { background: none; border: 0; border-radius: 9px; padding: 8px; cursor: pointer; color: var(--mu); }
+.seg.on { background: var(--ac); color: #1a1405; font-weight: 600; }
+.setpoint { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.setpoint output { font-size: 1.5rem; font-weight: 600; min-width: 5ch; text-align: center; }
+.setpoint .btn { width: 44px; height: 44px; font-size: 1.3rem; padding: 0; }
+
+.bar { width: 90px; height: 8px; background: var(--s2); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
+.bar i { display: block; height: 100%; background: var(--ok); }
+.low .bar i { background: var(--bad); }
+
+dialog { background: var(--s1); color: var(--tx); border: 1px solid var(--bd); border-radius: 18px; padding: 22px; width: min(420px, 92vw); }
+dialog::backdrop { background: #000a; backdrop-filter: blur(3px); }
+dialog form { display: grid; gap: 12px; }
+dialog h2 { margin: 0; font-size: 1.15rem; }
+dialog p { margin: 0; }
+dialog label { display: grid; gap: 6px; color: var(--mu); }
+dialog small { color: var(--mu); margin-top: -6px; }
+menu { display: flex; justify-content: flex-end; gap: 8px; margin: 0; padding: 0; }
+.error { color: var(--bad); }
+
+#toasts { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 10; }
+.toast { background: var(--s2); border: 1px solid var(--bd); border-radius: 12px; padding: 10px 14px; max-width: 320px; }
+.toast.bad { border-color: var(--bad); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

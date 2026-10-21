@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>SmartHome</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>SmartHome</h1>
+    <span id="status" class="status">Verbinde …</span>
+    <button id="add-btn" class="btn primary">+ Gerät hinzufügen</button>
+  </header>
+
+  <main id="grid" class="grid"></main>
+  <p id="empty" class="empty" hidden>Noch keine Geräte. Füge dein erstes Gerät hinzu.</p>
+
+  <dialog id="add-dialog">
+    <form id="add-form">
+      <h2>Gerät hinzufügen</h2>
+      <label>Name<input id="add-name" required autocomplete="off" placeholder="z. B. kommode"></label>
+      <small>Muss dem Namen in Zigbee2MQTT entsprechen.</small>
+      <label>Typ<select id="add-type"></select></label>
+      <p id="add-error" class="error" hidden></p>
+      <menu>
+        <button type="button" id="add-cancel" class="btn">Abbrechen</button>
+        <button class="btn primary">Hinzufügen</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="del-dialog">
+    <form method="dialog">
+      <h2>Gerät entfernen?</h2>
+      <p>„<b id="del-name"></b>“ wird aus dem Dashboard entfernt. Die Kopplung in Zigbee2MQTT bleibt bestehen.</p>
+      <menu>
+        <button value="cancel" class="btn">Abbrechen</button>
+        <button value="ok" class="btn danger">Entfernen</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <div id="toasts" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
